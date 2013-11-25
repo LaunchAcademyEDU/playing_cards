@@ -28,6 +28,16 @@ class PlayingCard
     ['J', 'Q', 'K'].include?(@rank)
   end
 
+  def value
+    if self.face_card?
+      15
+    elsif self.rank == 'A'
+      1
+    else
+      self.rank.to_i
+    end
+  end
+
   def rank
     @rank
   end
@@ -63,13 +73,7 @@ class PlayerHand
     score = 0
     @collection.each do |card|
       puts card.rank
-      if card.face_card?
-        score += 15
-      elsif card.rank == 'A'
-        score += 1
-      else
-        score += card.rank.to_i
-      end
+      score += card.value
     end
 
     score
