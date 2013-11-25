@@ -15,10 +15,10 @@
 # end
 
 
-SUITS = ['♠', '♣', '♥', '♦']
-VALUES = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
-
 class PlayingCard
+  SUITS = ['♠', '♣', '♥', '♦']
+  VALUES = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
+
   def initialize(rank, suit)
     @rank = rank
     @suit = suit
@@ -26,16 +26,6 @@ class PlayingCard
 
   def face_card?
     ['J', 'Q', 'K'].include?(@rank)
-  end
-
-  def value
-    if self.face_card?
-      15
-    elsif self.rank == 'A'
-      1
-    else
-      self.rank.to_i
-    end
   end
 
   def rank
@@ -47,11 +37,27 @@ class PlayingCard
   end
 end
 
+class PointCalculation
+  def initialize(playing_card)
+    @playing_card = playing_card
+  end
+
+  def value
+    if @playing_card.face_card?
+      15
+    elsif @playing_card.rank == 'A'
+      1
+    else
+      @playing_card.rank.to_i
+    end
+  end
+end
+
 class Deck
   def initialize
     @collection = []
-    SUITS.each do |suit|
-      VALUES.each do |value|
+    PlayingCard::SUITS.each do |suit|
+      PlayingCard::VALUES.each do |value|
         @collection << PlayingCard.new(value, suit)
       end
     end
@@ -73,7 +79,7 @@ class PlayerHand
     score = 0
     @collection.each do |card|
       puts card.rank
-      score += card.value
+      score += PointCalculation.new(card).value
     end
 
     score
